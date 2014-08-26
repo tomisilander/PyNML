@@ -1,21 +1,35 @@
 #!/usr/bin/python
 
 import operator, math
-from nml import reg, contab
-from nml.nml import lognml as lp
+from nml import contab
+from nml.nml import lognml
 import logmath
 
-
-def deptest_ctb(ctb):
+def lognml_gi(ctb):
     frqsX  = map(sum, ctb)
     frqsY  = map(sum, zip(*ctb))
-    frqsXY = reduce(operator.__concat__, ctb, [])
  
-    lpX  = lp(frqsX)
-    lpY  = lp(frqsY)
-    lpXY = lp(frqsXY)
-    # print lpXY - lpX
-    return logmath.lognorm([lpX+lpY, lpXY])
+    lpX  = lognml(frqsX)
+    lpY  = lognml(frqsY)
+
+    return lpX + lpY
+
+    
+def lognml_f(ctb):
+
+    frqsXY = reduce(operator.__concat__, ctb, [])
+    lpXY = lognml(frqsXY)
+
+    return lpXY
+
+def nml_gi(ctb):
+	return math.exp(lognml_gi(ctb))
+	
+def nml_f(ctb):
+	return math.exp(lognml_f(ctb))
+
+def deptest_ctb(ctb):
+    return logmath.lognorm([lognml_gi(ctb), lognml_f(ctb)])
     
 def deptest(ctblines):
     return deptest_ctb(contab.get_ctb(ctblines))

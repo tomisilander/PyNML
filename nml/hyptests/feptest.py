@@ -23,10 +23,10 @@ def logfnml_f(ctb):
     return lpX + lpYifX
 
 def fnml_gi(ctb):
-	return mth.exp(logfnml_gi(ctb))
+	return math.exp(logfnml_gi(ctb))
 	
 def fnml_f(ctb):
-	return mth.exp(logfnml_f(ctb))
+	return math.exp(logfnml_f(ctb))
 
 
 def deptest_ctb(ctb):
