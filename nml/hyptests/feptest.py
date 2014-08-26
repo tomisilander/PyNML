@@ -1,21 +1,41 @@
 #!/usr/bin/python
 
 import operator, math
-import reg, contab, logmath
+from nml import reg, contab, nml
+import logmath
 
-def lp(frqs):
-    N, k = sum(frqs), len(frqs)
-    return contab.lognom(frqs)  - math.log(reg.reg(N,k))
+def logfnml_gi(ctb):
+    frqsX  = map(sum, ctb)
+    frqsY  = map(sum, zip(*ctb))
+ 
+    lpX  = nml.lognml(frqsX)
+    lpY  = nml.lognml(frqsY)
+
+    return lpX + lpY
+
+    
+def logfnml_f(ctb):
+    frqsX  = map(sum, ctb)
+
+    lpX  = nml.lognml(frqsX)
+    lpYifX = sum(nml.lognml(ctrow) for ctrow in ctb)
+
+    return lpX + lpYifX
+
+def fnml_gi(ctb):
+	return mth.exp(logfnml_gi(ctb))
+	
+def fnml_f(ctb):
+	return mth.exp(logfnml_f(ctb))
+
 
 def deptest_ctb(ctb):
     frqsX  = map(sum, ctb)
     frqsY  = map(sum, zip(*ctb))
-    frqsXY = reduce(operator.__concat__, ctb, [])
  
-    lpX  = lp(frqsX)
-    lpY  = lp(frqsY)
-    lpYifX = sum(lp(ctrow) for ctrow in ctb)
-    # print lpYifX
+    lpX  = nml.lognml(frqsX)
+    lpY  = nml.lognml(frqsY)
+    lpYifX = sum(nml.lognml(ctrow) for ctrow in ctb)
 
     return logmath.lognorm([lpX+lpY, lpYifX+lpX])
     

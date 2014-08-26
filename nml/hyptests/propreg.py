@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-import math, operator
-import regtab, contab, logmath
+import math
+from nml import regtab, contab
+import logmath
 
 def xlogbinoms(n, logs):
     lb = 0.0
@@ -114,7 +115,7 @@ if __name__ == '__main__':
         
     coliche.che(main,
                 """
-                f0 (int)  : numer  of zeros
+                f0 (int)  : number of zeros
                 f1 (int)  : number of ones (successes)
                 mfile     : modelfile with lines "[I|O] lower_limit upper_limit"
                 """)

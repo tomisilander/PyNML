@@ -17,4 +17,4 @@ def ml(frqs):
 
 if __name__ == '__main__':
     import sys
-    print logml(*map(int,sys.argv[1:]))
+    print logml(map(int,sys.argv[1:]))

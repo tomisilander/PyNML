@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys, math, sets, coliche, operator, logmath
+import math, logmath
 
 def lgamma(x):
     """
@@ -34,7 +34,7 @@ def vs(ssi, a):
 
 
 def var_score(ssi, N):
-
+    N = float(N)
     q = len(ssi)
     r  = len(ssi[0])
 
@@ -64,19 +64,13 @@ def deptest_BD(ctb, a):
     
     return logmath.lognorm([lpY, lpYifX])
 
-def deptest_BDeu(ctb, ess):
+def deptest_BDeu(ctb, ess=1.0):
     lpX     = var_score([map(sum, ctb)], ess)
     lpY     = var_score([map(sum, zip(*ctb))], ess)
     lpYifX  = var_score(ctb, ess)
     
     return logmath.lognorm([lpY, lpYifX])
 
-def deptest_BD(ctb, ess):
-    lpX     = var_score([map(sum, ctb)], ess)
-    lpY     = var_score([map(sum, zip(*ctb))], ess)
-    lpYifX  = var_score(ctb, ess)
-    
-    return logmath.lognorm([lpY, lpYifX])
 
 def logratio(ctbfile, ess=1.0):
 
@@ -96,6 +90,7 @@ def main(cbtfile, ess=1.0):
     print "%.4f %.4f" % (i, d)
     
 if __name__ == "__main__":
+    import coliche 
     coliche.che(main,
                 """
                 cbtfile : contingency table

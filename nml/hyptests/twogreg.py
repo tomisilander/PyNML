@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-import math, operator
-import reg, regtab, contab, logmath
+import math
+from nml import reg,  regtab, contab, ml
+import logmath
 
 def xlogbinoms(n, logs):
     lb = 0.0
@@ -40,13 +41,13 @@ def R_eq(ctb):
 def twogtest(ctblines):
     ctb  = contab.get_ctb(ctblines)
 
-    lnom_eq = contab.lognom(map(sum, zip(*ctb)))
+    lnom_eq = ml.logml(map(sum, zip(*ctb)))
 
     reg_eq  = R_eq(ctb)
     lreg_eq = math.log(reg_eq)
 
 
-    lnom_f  = sum(map(contab.lognom, ctb))
+    lnom_f  = sum(map(ml.logml, ctb))
 
     n1, n2 = map(sum, ctb)
     reg_f   = reg.reg(n1,2) * reg.reg(n2,2)
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     import coliche
 
     def main(ctbfile):
-            print twogtest(file(ctbfile))
+            print " ".join(map(str, twogtest(file(ctbfile))))
         
     coliche.che(main, "ctbfile")
 

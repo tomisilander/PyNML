@@ -1,12 +1,5 @@
 #!/usr/bin/python
 
-import math
-
-def lognom(frqs):
-    N = sum(frqs)
-    return sum([frq and (frq * (math.log(frq) - math.log(N))) or 0
-                for frq in frqs])
-
 def get_ctb(ctblines):
     
     try:

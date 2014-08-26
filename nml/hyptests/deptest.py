@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import operator, math
-import reg, contab, logmath
+from nml import reg, contab
+from nml.nml import lognml as lp
+import logmath
 
-def lp(frqs):
-    N, k = sum(frqs), len(frqs)
-    return contab.lognom(frqs)  - math.log(reg.reg(N,k))
 
 def deptest_ctb(ctb):
     frqsX  = map(sum, ctb)
