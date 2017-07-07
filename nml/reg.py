@@ -263,23 +263,28 @@ def reg2(N):
                    + sqrt(8/(9*N*pi))
                    + (1.0/12 - 4/(9*pi))/N)
 
-def reg(N, K):
+def gen_regs(N,K):
     if K<=0 :
         raise Exception("K has to be a positive number.")
     if N<0 :
         raise Exception("N has to be a non-negative number.")
+    
+    rk_2 = 1.0 # for K=1
+    yield rk_2 
+    if K > 1:
+        rk_1 = reg2(N) # for K=2
+        yield rk_1
+    for k in xrange(3,K+1):
+        rk = rk_1 + rk_2 /(k-2)*N
+        yield rk
+        rk_2, rk_1 = rk_1, rk
 
-    if K == 1:
-        return 1.0 
-    elif K == 2:
-        return reg2(N)
-    else:
-        rk_2 = reg(N,1)
-        rk_1 = reg(N,2)
-        for k in xrange(3,K+1):
-            rk = rk_1 + rk_2 /(k-2)*N
-            rk_2, rk_1 = rk_1, rk
+
+def reg(N, K):
+    for rk in gen_regs(N,K):
+        pass
     return rk
+
 
 
 if __name__ == '__main__':
