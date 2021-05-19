@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from math import log, exp
-from ml import *
+from ml import logml
 from reg import reg
 
 def lognml(frqs):
@@ -17,4 +17,4 @@ def nml(frqs):
 
 if __name__ == '__main__':
     import sys
-    print lognml(map(int,sys.argv[1:]))
+    print(lognml([int(arg) for arg in sys.argv[1:]]))

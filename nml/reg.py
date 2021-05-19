@@ -1,6 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-from math import pi, log, exp, sqrt
+from math import pi, log, exp, sqrt, lgamma
+from nml.regtab import Rs
 
 r2_1000 = [
 1.0, 2.0, 2.5, 2.88888888889, 3.21875, 3.5104, 3.77469135802,
@@ -255,15 +256,35 @@ r2_1000 = [
 40.2833929563, 40.3032129263
 ]
 
-def reg2(N):
+hlogpi = 0.5*log(pi)
+sh  = sqrt(0.5)
+def logreg_szp1(N, K):
+    hK   = 0.5 * K
+    hK_h = hK - 0.5
+    return ((hK_h) * log(N/2.0)
+      + hlogpi - lgamma(hK)                       
+      + 0.5 - pow(sh - (K/3.0/sqrt(N)) * exp(lgamma(hK)-lgamma(hK_h)), 2)
+      + (3+K*(K-2)*(2*K +1))/(36.0*N))
+
+def logreg_szp2(N, K):
+  a = K/N
+  Ca = 0.5*(1+sqrt(1+4/a))
+  return N*(log(a)+(a+2)*log(Ca)-1/Ca)-0.5*log(Ca+2/a)
+
+def reg2(N, exact=False):
     if N<=1000:
         return r2_1000[N]
     else:
-        return exp(0.5*log(N*pi/2)
-                   + sqrt(8/(9*N*pi))
-                   + (1.0/12 - 4/(9*pi))/N)
+        if exact:
+            rs = Rs(N,2) #iterator
+            _r1 = next(rs)
+            return next(rs)[-1]
+        else:
+            return exp(0.5*log(N*pi/2)
+                    + sqrt(8/(9*N*pi))
+                    + (1.0/12 - 4/(9*pi))/N)
 
-def gen_regs(N,K):
+def gen_regs(N,K, exact=False):
     if K<=0 :
         raise Exception("K has to be a positive number.")
     if N<0 :
@@ -272,16 +293,16 @@ def gen_regs(N,K):
     rk_2 = 1.0 # for K=1
     yield rk_2 
     if K > 1:
-        rk_1 = reg2(N) # for K=2
+        rk_1 = reg2(N, exact) # for K=2
         yield rk_1
-    for k in xrange(3,K+1):
+    for k in range(3,K+1):
         rk = rk_1 + rk_2 /(k-2)*N
         yield rk
         rk_2, rk_1 = rk_1, rk
 
 
-def reg(N, K):
-    for rk in gen_regs(N,K):
+def reg(N, K, exact=False):
+    for rk in gen_regs(N,K, exact):
         pass
     return rk
 
@@ -289,4 +310,11 @@ def reg(N, K):
 
 if __name__ == '__main__':
     import sys
-    print reg(*map(int,sys.argv[1:]))
+    import coche
+    usage = """
+        N (int)
+        K (int)
+        --exact (false): use exact values for all N when K=2
+        """
+    result = coche.che(reg, usage)
+    print(result)
