@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from math import pi, log, exp, sqrt, lgamma
-from nml.regtab import Rs
+from .regtab import Rs
 
 r2_1000 = [
 1.0, 2.0, 2.5, 2.88888888889, 3.21875, 3.5104, 3.77469135802,
